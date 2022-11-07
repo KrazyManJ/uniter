@@ -1,10 +1,9 @@
-from .Uniter import Unit
+from .Uniter import Unit, Unitor, Quantitor
 
-
+@Quantitor("T")
 class Temperature(Unit):
     def __conv__(self, unit):
-        if self.__class__ is unit:
-            return self.__int__()
+        if self.__class__ is unit: return self.__int__()
         MAP: dict = {
             (DEG_C, DEG_K): lambda C: C - 273.15,
             (DEG_C, DEG_F): lambda C: 9 / 5 * C + 32,
@@ -15,6 +14,9 @@ class Temperature(Unit):
         }
         return MAP[self.__class__, unit](self.__int__())
 
+@Unitor("°C", 1)
 class DEG_C(Temperature): pass
+@Unitor("°F")
 class DEG_F(Temperature): pass
+@Unitor("°K")
 class DEG_K(Temperature): pass

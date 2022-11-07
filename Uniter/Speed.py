@@ -1,17 +1,20 @@
-from .Uniter import Unit, Unitor
+from .Uniter import Unit, Unitor, Quantitor
 
+@Quantitor("v")
 class Speed(Unit): pass
 
 # METRIC
-@Unitor(1)
+@Unitor("km/h",1)
 class KMH(Speed): pass
-@Unitor(3.6)
+@Unitor("m/s",3.6)
 class MS(Speed): pass
 
 # IMPERIAl
-@Unitor(1.609344)
+@Unitor("mph",1.609344)
 class MPH(Speed): pass
+@Unitor("fps",1.09728)
+class FPS(Speed): pass
 
 # SPACE
-@Unitor(1.07925285 * (10 ** 9))
+@Unitor("c",1.07925285 * (10 ** 9))
 class LightSpeed(Speed): pass
