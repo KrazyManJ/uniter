@@ -1,4 +1,4 @@
-from .Uniter import Unit, Unitor, Quantitor
+from Uniter.Uniter import Unit, Unitor, Quantitor
 
 @Quantitor("t")
 class Time(Unit): pass

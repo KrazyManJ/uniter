@@ -1,4 +1,4 @@
-from .Uniter import Unit, Unitor, UnitType, Quantitor
+from Uniter.Uniter import Unit, Unitor, UnitType, Quantitor
 
 @Quantitor("m")
 class Mass(Unit): pass

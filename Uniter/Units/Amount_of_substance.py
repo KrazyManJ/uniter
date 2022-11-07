@@ -1,4 +1,4 @@
-from .Uniter import Unit, Unitor, Quantitor
+from Uniter.Uniter import Unit, Unitor, Quantitor
 
 @Quantitor("n")
 class AmountOfSubstance(Unit): pass

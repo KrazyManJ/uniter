@@ -8,11 +8,11 @@ class Unit(object):
 
     @property
     def multiplier(self) -> float:
-        return 1
+        return 0
 
     @property
     def symbol(self):
-        return ""
+        return None
 
     @property
     def unit_type(self):
