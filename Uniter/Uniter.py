@@ -61,7 +61,23 @@ class Unit(object):
         if isinstance(other, (int, float)):
             return self.__class__(self.__value / other)
 
+    def __idiv__(self, other):
+        if isinstance(other, (int, float)):
+            return self.__class__(self.__value / other)
+
     def __rdiv__(self, other):
+        if isinstance(other, (int, float)):
+            return self.__class__(self.__value / other)
+
+    def __truediv__(self, other):
+        if isinstance(other, (int, float)):
+            return self.__class__(self.__value / other)
+
+    def __itruediv__(self, other):
+        if isinstance(other, (int, float)):
+            return self.__class__(self.__value / other)
+
+    def __rtruediv__(self, other):
         if isinstance(other, (int, float)):
             return self.__class__(self.__value / other)
 
@@ -72,11 +88,15 @@ class Unit(object):
         return f"<{self.__class__.__base__.__name__}.{self.__class__.__name__} value={self.__value}>"
 
     def __int__(self):
+        return round(self.__value)
+
+    def __float__(self):
         return self.__value
 
     @classmethod
     def default_unit(cls):
-        return [c for c in cls.__class__.__base__.__subclasses__() if c().multiplier == 1][0]
+        clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
+        return [c for c in clss if c.multiplier == 1][0]
 
     @classmethod
     def units_by_category(cls, unit):
