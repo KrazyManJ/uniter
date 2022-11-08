@@ -9,3 +9,5 @@ from .Luminous_intensity import *
 
 from .Speed import *
 from .Angle import *
+from .Resistance import *
+from .Voltage import *

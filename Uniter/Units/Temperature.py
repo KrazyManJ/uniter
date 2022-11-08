@@ -1,22 +1,29 @@
 from Uniter.Uniter import Unit, Unitor, Quantitor
 
+
 @Quantitor("T")
 class Temperature(Unit):
     def __conv__(self, unit):
-        if self.__class__ is unit: return self.__int__()
-        MAP: dict = {
-            (DEG_C, DEG_K): lambda C: C - 273.15,
-            (DEG_C, DEG_F): lambda C: 9 / 5 * C + 32,
-            (DEG_F, DEG_C): lambda F: 5 / 9 * (F - 32),
-            (DEG_K, DEG_C): lambda K: K + 273.15,
-            (DEG_F, DEG_K): lambda F: (5 / 9 * (F - 32)) - 273.15,
-            (DEG_K, DEG_F): lambda K: 9 / 5 * K + 273.15 + 32
-        }
-        return MAP[self.__class__, unit](self.__int__())
+        from sympy import symbols, Eq, solve
+        if self.__class__ is unit:
+            return self
+        C, K, F = symbols("C K F")
+        SYM = {DEG_C: C, DEG_K: K, DEG_F: F}
+        EQ = {(DEG_C, DEG_K): Eq(C + 273.15, K), (DEG_C, DEG_F): Eq(9 / 5 * C + 32, F),
+              (DEG_K, DEG_F): Eq(9 / 5 * K - 459.67, F)}
+
+        return \
+        solve(EQ[[k for k in EQ.keys() if set(k) == {self.__class__, unit}][0]].subs(SYM[self.__class__], float(self)))[
+            0]
+
 
 @Unitor("°C", 1)
 class DEG_C(Temperature): pass
+
+
 @Unitor("°F")
 class DEG_F(Temperature): pass
+
+
 @Unitor("°K")
 class DEG_K(Temperature): pass

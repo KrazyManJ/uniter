@@ -30,7 +30,12 @@ class Unit(object):
 
         return unit(self.__conv__(unit))
 
-    def __conv__(self, unit):
+    @staticmethod
+    def __clr_pd__(num: float):
+        from re import sub
+        return float(sub(r"(?<=\.)(0)(\1+)", "", str(num)))
+
+    def __conv__(self, unit) -> float:
         return self.__value * self.multiplier / unit(0).multiplier
 
     def __calc__(self, other, oper_name, oper_symbol):
@@ -57,23 +62,7 @@ class Unit(object):
         if isinstance(other, (int, float)):
             return self.__class__(self.__value * other)
 
-    def __div__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value / other)
-
-    def __idiv__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value / other)
-
-    def __rdiv__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value / other)
-
     def __truediv__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value / other)
-
-    def __itruediv__(self, other):
         if isinstance(other, (int, float)):
             return self.__class__(self.__value / other)
 
@@ -82,7 +71,7 @@ class Unit(object):
             return self.__class__(self.__value / other)
 
     def __str__(self):
-        return f"{self.__value}{self.symbol}"
+        return f"{float(self)}{self.symbol}"
 
     def __repr__(self):
         return f"<{self.__class__.__base__.__name__}.{self.__class__.__name__} value={self.__value}>"
@@ -91,7 +80,7 @@ class Unit(object):
         return round(self.__value)
 
     def __float__(self):
-        return self.__value
+        return self.__clr_pd__(float(self.__value))
 
     @classmethod
     def default_unit(cls):

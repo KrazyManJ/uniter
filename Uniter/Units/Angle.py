@@ -3,16 +3,15 @@ from Uniter.Uniter import Unit, Unitor
 
 class Angle(Unit):
     def __conv__(self, unit):
-        from math import degrees, radians
-        if self.__class__ is unit:
-            return self.__int__()
-        MAP = { DEG: degrees, RAD: radians }
-        return MAP[unit](self.__int__())
-    pass
+        from sympy import symbols, Eq, solve
+        from math import pi
+        deg, rad = symbols("deg rad")
+        return solve(Eq(deg * pi / 180, rad).subs({DEG: deg, RAD: rad}[self.__class__], float(self)))[0]
 
-@Unitor("°",1)
+
+@Unitor("°", 1)
 class DEG(Angle): pass
 
-@Unitor("rad",0)
-class RAD(Angle): pass
 
+@Unitor("rad", 0)
+class RAD(Angle): pass
