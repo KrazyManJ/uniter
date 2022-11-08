@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Type
 
 
 class Unit(object):
@@ -51,27 +52,32 @@ class Unit(object):
     def __sub__(self, other: "Unit"):
         return self.__calc__(other, "Subtraction", "-")
 
-    def __getitem__(self, unit):
+    def __getitem__(self, unit: Type["Unit"]):
         return self.convert_to(unit)
 
-    def __mul__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value * other)
+    def __mul__(self, other: int | float):
+        if not isinstance(other, (int, float)):
+            raise TypeError(f"Multiplication of Unit with {other.__class__.__name__}, use int/float instead!")
+        self.__value *= other
+        return self
 
-    def __rmul__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value * other)
+    def __rmul__(self, other: int | float):
+        return self.__mul__(other)
 
-    def __truediv__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value / other)
+    def __truediv__(self, other: int | float):
+        if not isinstance(other, (int, float)):
+            raise TypeError(f"Division of Unit with {other.__class__.__name__}, use int/float instead!")
+        self.__value /= other
+        return self
 
-    def __rtruediv__(self, other):
-        if isinstance(other, (int, float)):
-            return self.__class__(self.__value / other)
+    def __floordiv__(self, other: int | float):
+        if not isinstance(other, (int, float)):
+            raise TypeError(f"Division of Unit with {other.__class__.__name__}, use int/float instead!")
+        self.__value //= other
+        return self
 
     def __str__(self):
-        return f"{float(self)}{self.symbol}"
+        return f"{float(self) if round(self.__value) != self.__value else int(self.__value)}{self.symbol}"
 
     def __repr__(self):
         return f"<{self.__class__.__base__.__name__}.{self.__class__.__name__} value={self.__value}>"

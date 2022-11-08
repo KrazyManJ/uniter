@@ -31,8 +31,9 @@ print( KM(50)-KG(30) )              # raise error due to non equal quantities
 ```py
 from Uniter.Units import *
 
-print ( KM(30) * 80 )               # prints out 2400KM
-print ( KM(30) / 6 )                # prints out 5KM
+print ( KM(30) * 80 )               # prints out 2400km in Unit object
+print ( KM(30) / 6 )                # prints out 5km in Unit object
+print ( KM(8) // 6 )                # prints out 1km in Unit object
 ```
 
 ### Parsing string to Uniter units
