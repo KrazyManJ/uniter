@@ -23,7 +23,7 @@ from human-readable string.
 ```py
 from Uniter.Units import *
 
-print( DM(80).convert_to(M) )       # prints out 8,
+print( DM(80).convert_to(M) )       # prints out 8m in Unit object
 print( DM(80)[M] )                  # same thing but shorter syntax
 print( DM(80)[KG] )                 # raises TypeError: Illegal conversion from Length to object 
 ```

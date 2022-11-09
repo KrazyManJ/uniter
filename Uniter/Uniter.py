@@ -1,9 +1,8 @@
 from enum import Enum
 from typing import Type
-from abc import ABC
 
 
-class Unit(ABC):
+class Unit:
 
     def __init__(self, value):
         if type(self) is Unit or type(self).__base__ is Unit:
@@ -27,10 +26,13 @@ class Unit(ABC):
         return None
 
     def convert_to(self, unit):
+        if type(self) is unit:
+            return self
         if type(unit) is not type or not isinstance(self, unit.__base__):
             sbs = self.__class__.__base__.__subclasses__()
+            cvt = unit.__base__.__name__ if type(unit) is type else type(unit).__name__
             raise TypeError(
-                f"Illegal conversion from {self.__class__.__base__.__name__} to {unit.__base__.__name__} available units to convert this object to: {', '.join([c.__name__ for c in sbs])}")
+                f"Illegal conversion from {self.__class__.__base__.__name__} to {cvt} available units to convert this object to: {', '.join([c.__name__ for c in sbs])}")
 
         return unit(self.__conv__(unit))
 
