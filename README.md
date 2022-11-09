@@ -9,15 +9,19 @@ from human-readable string.
 
 <h2 align="center">Features</h2>
 
-- [X] Unit conversion between metric and imperial units
-- [X] Mathematical operations between them (more described in [Syntax](https://github.com/KrazyManJ/Uniter#syntax))
-  - [X] Addition / Subtraction
-  - [X] Multiplication / Division / Floor division
-  - [X] Power
-- [X] Parsing from humar-readable string
+- [X] Unit [conversion](https://github.com/KrazyManJ/Uniter#conversion) between metric and imperial units
+- [X] Mathematical operations between units:
+  - [X] [Addition / Subtraction](https://github.com/KrazyManJ/Uniter#addition--subtraction)
+  - [X] [Multiplication / Division / Floor division](https://github.com/KrazyManJ/Uniter#addition--subtraction)
+  - [X] [Power](https://github.com/KrazyManJ/Uniter#addition--subtraction)
+- [X] [Parsing](https://github.com/KrazyManJ/Uniter#parsing-string-to-uniter-units) from humar-readable string
+- [X] Ability to [add custom units](https://github.com/KrazyManJ/Uniter#custom-quantityunits)
 - [ ] Adding formulas to create relation between units of different physics quantity (e.g. ohm's law)
 
 <h2 align="center">Syntax</h2>
+
+Here are some examples of features, including bad one to show you what you should
+not do while using all of these aspects.
 
 ### Conversion
 ```py
@@ -40,7 +44,7 @@ print( KM(50)-M(30) )               # prints out 4070m in Unit object
 print( KM(50)-KG(30) )              # raise TypeError: Subtraction of non-equal units (Length - Mass)
 ```
 
-### Multiplication / Division
+### Multiplication / Division / Floor division
 
 - One of mul/div values needs to be int/float, not Unit type
 
@@ -68,7 +72,7 @@ import Uniter
 print( Uniter.parse("2m + 5km") )   # returns 5.002km in Unit object
 ```
 
-## Custom quantity/units
+### Custom quantity/units
 
 Before creation of your custom units, you need to know that units are structurized
 as inheritance of `Unit (Base Class)` -> `{Your name of unit here}` -> `{Name of unit}`.
@@ -97,7 +101,7 @@ you can just use defined decorators in `Uniter.py` file like that:
 ```py
 from Uniter.Uniter import Unit,Unitor,Quantitor,UnitType
 
-# In this example i am using keywords arguments to make it clearer for you
+# In this example I am using keywords arguments to make it clearer for you
 
 # Creates physics quantity of your name and sign
 @Quantitor(sign="EQ")

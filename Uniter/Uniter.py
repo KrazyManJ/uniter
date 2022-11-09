@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Type
 
 
 class Unit:
@@ -37,11 +36,11 @@ class Unit:
         return unit(self.__conv__(unit))
 
     @staticmethod
-    def __clr_pd__(num: float):
+    def __clr_pd__(num):
         from re import sub
         return float(sub(r"(?<=\.)(0)(\1+)", "", str(num)))
 
-    def __conv__(self, unit) -> float:
+    def __conv__(self, unit):
         return self.__value * self.multiplier / unit(0).multiplier
 
     def __calc__(self, other, oper_name, oper_symbol):
@@ -51,22 +50,22 @@ class Unit:
                 f"{oper_name} of non-equal units ({self.__class__.__base__.__name__} {oper_symbol} {other.__class__.__base__.__name__})")
         return other.__class__(op[oper_symbol](self.__conv__(other.__class__), other.__value))
 
-    def __add__(self, other: "Unit"):
+    def __add__(self, other):
         return self.__calc__(other, "Addition", "+")
 
-    def __sub__(self, other: "Unit"):
+    def __sub__(self, other):
         return self.__calc__(other, "Subtraction", "-")
 
-    def __getitem__(self, unit: Type["Unit"]):
+    def __getitem__(self, unit):
         return self.convert_to(unit)
 
-    def __mul__(self, other: int | float):
+    def __mul__(self, other):
         if not isinstance(other, (int, float)):
             raise TypeError(f"Multiplication of Unit with {other.__class__.__name__}, use int/float instead!")
         self.__value *= other
         return self
 
-    def __rmul__(self, other: int | float):
+    def __rmul__(self, other):
         return self.__mul__(other)
 
     def __pow__(self, power, modulo=None):
@@ -117,7 +116,7 @@ class Unitor:
         self.__sy = symbol
         self.__ut = unit_type
 
-    def __call__(self, cls):
+    def __call__(self, cls: type):
         cls.multiplier = self.__mp
         cls.symbol = self.__sy
         cls.unit_type = self.__ut

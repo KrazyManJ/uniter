@@ -1,5 +1,5 @@
 def calc_average_speed(length=None, speed=None, time=None):
-    from Units import M, MS, SEC
+    from Uniter.Units import M, MS, SEC
     from sympy import symbols, Eq, solve
     s, v, t = symbols("s v t")
     formula, rtU, ct = Eq(s, v * t), None, 0
@@ -15,7 +15,7 @@ def calc_average_speed(length=None, speed=None, time=None):
 
 
 def ohms_law(electric_current=None, voltage=None, resistance=None):
-    from Units import A, Volt, OHM
+    from Uniter.Units import A, Volt, OHM
     from sympy import symbols, Eq, solve
     i, u, r = symbols("i u r")
     formula, rtU, ct = Eq(u / r, i), None, 0
