@@ -1,10 +1,13 @@
 from enum import Enum
 from typing import Type
+from abc import ABC
 
 
-class Unit(object):
+class Unit(ABC):
 
     def __init__(self, value):
+        if type(self) is Unit or type(self).__base__ is Unit:
+            raise Exception(f"Cannot instatiate {type(self).__name__} class")
         self.__value = value
 
     @property
@@ -27,7 +30,7 @@ class Unit(object):
         if type(unit) is not type or not isinstance(self, unit.__base__):
             sbs = self.__class__.__base__.__subclasses__()
             raise TypeError(
-                f"Is not unit to convert to, use unit class instead (Full list of them: {', '.join([c.__name__ for c in sbs])})")
+                f"Illegal conversion from {self.__class__.__base__.__name__} to {unit.__base__.__name__} available units to convert this object to: {', '.join([c.__name__ for c in sbs])}")
 
         return unit(self.__conv__(unit))
 
@@ -43,7 +46,7 @@ class Unit(object):
         op = {'+': lambda x, y: x + y, '-': lambda x, y: x - y}
         if self.__class__.__base__ is not other.__class__.__base__:
             raise TypeError(
-                f"{oper_name} of non equal units ({self.__class__.__base__.__name__} {oper_symbol} {other.__class__.__base__.__name__})")
+                f"{oper_name} of non-equal units ({self.__class__.__base__.__name__} {oper_symbol} {other.__class__.__base__.__name__})")
         return other.__class__(op[oper_symbol](self.__conv__(other.__class__), other.__value))
 
     def __add__(self, other: "Unit"):
@@ -63,6 +66,12 @@ class Unit(object):
 
     def __rmul__(self, other: int | float):
         return self.__mul__(other)
+
+    def __pow__(self, power, modulo=None):
+        if not isinstance(power, (int, float)):
+            raise TypeError(f"Power of Unit with {power.__class__.__name__}, use int/float instead!")
+        self.__value = pow(self.__value, power, modulo)
+        return self
 
     def __truediv__(self, other: int | float):
         if not isinstance(other, (int, float)):
