@@ -1,7 +1,7 @@
-from Uniter.Uniter import Unit, Unitor, Quantitor
+from Uniter.Uniter import Unit, Unitor, Quantitor, QuantityType
 
 
-@Quantitor("T")
+@Quantitor("T",QuantityType.CUSTOM_CALCULATION)
 class Temperature(Unit):
     def __conv__(self, unit):
         from sympy import symbols, Eq, solve

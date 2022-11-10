@@ -1,7 +1,4 @@
-from typing import TypeVar
-from Uniter.Uniter import Unit
-
-__Q = TypeVar("__Q")
+from Uniter.Uniter import Unit, __Q
 
 class Length(Unit[__Q]): pass
 
@@ -18,5 +15,4 @@ class McM(Length[Length]): pass
 class Mile(Length[Length]): pass
 class NM(Length[Length]): pass
 class PM(Length[Length]): pass
-class UnitType(Length[Length]): pass
 class Yard(Length[Length]): pass

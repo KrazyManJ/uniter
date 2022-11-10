@@ -1,7 +1,4 @@
-from typing import TypeVar
-from Uniter.Uniter import Unit
-
-__Q = TypeVar("__Q")
+from Uniter.Uniter import Unit, __Q
 
 class Amount_of_substance(Unit[__Q]): pass
 

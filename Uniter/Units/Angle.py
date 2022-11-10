@@ -1,6 +1,6 @@
-from Uniter.Uniter import Unit, Unitor
+from Uniter.Uniter import Unit, Unitor, Quantitor, QuantityType
 
-
+@Quantitor("°",QuantityType.CUSTOM_CALCULATION)
 class Angle(Unit):
     def __conv__(self, unit):
         from sympy import symbols, Eq, solve

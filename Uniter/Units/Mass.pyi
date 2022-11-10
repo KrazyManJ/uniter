@@ -1,7 +1,4 @@
-from typing import TypeVar
-from Uniter.Uniter import Unit
-
-__Q = TypeVar("__Q")
+from Uniter.Uniter import Unit, __Q
 
 class Mass(Unit[__Q]): pass
 
@@ -12,4 +9,3 @@ class Ounce(Mass[Mass]): pass
 class Pound(Mass[Mass]): pass
 class Stone(Mass[Mass]): pass
 class T(Mass[Mass]): pass
-class UnitType(Mass[Mass]): pass

@@ -1,7 +1,4 @@
-from typing import TypeVar
-from Uniter.Uniter import Unit
-
-__Q = TypeVar("__Q")
+from Uniter.Uniter import Unit, __Q
 
 class Temperature(Unit[__Q]): pass
 

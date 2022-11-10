@@ -1,5 +1,5 @@
 from enum import Enum
-
+from .Util import classproperty
 
 class Unit:
 
@@ -8,21 +8,20 @@ class Unit:
             raise Exception(f"Cannot instatiate {type(self).__name__} class")
         self.__value = value
 
-    @property
-    def multiplier(self) -> float:
-        return 0
+    @classproperty
+    def multiplier(self) -> float: return self.__multiplier
 
-    @property
-    def symbol(self):
-        return None
+    @classproperty
+    def symbol(self): return self.__symbol
 
-    @property
-    def unit_type(self):
-        return None
+    @classproperty
+    def unit_type(self): return self.__unit_type
 
-    @property
-    def sign(self):
-        return None
+    @classproperty
+    def sign(self): return self.__sign
+
+    @classproperty
+    def quantity_type(self): return self.__quantity_type
 
     def convert_to(self, unit):
         if type(self) is unit:
@@ -33,15 +32,54 @@ class Unit:
             raise TypeError(
                 f"Illegal conversion from {self.__class__.__base__.__name__} to {cvt} available units to convert this object to: {', '.join([c.__name__ for c in sbs])}")
 
-        return unit(self.__conv__(unit))
+        return unit(self.__conv__(unit))  # type: ignore
+
+    def in_bigger_unit(self, keep_unit_type=True):
+        return self[self.__class__.bigger_unit(keep_unit_type)]
+
+    def in_smaller_unit(self, keep_unit_type=True):
+        return self[self.__class__.smaller_unit(keep_unit_type)]
+
+    @classmethod
+    def bigger_unit(cls, keep_unit_type=True):
+        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return cls
+        units, index = cls.__unit_size_map__(keep_unit_type, "bigger unit")  # type: ignore
+        return units[min(index + 1, units.__len__() - 1)]
+
+    @classmethod
+    def smaller_unit(cls, keep_unit_type=True):
+        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return cls
+        units, index = cls.__unit_size_map__(keep_unit_type, "smaller unit")  # type: ignore
+        return units[max(index - 1, 0)]
+
+    @classmethod
+    def is_biggest(cls, in_unit_type=True):
+        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return False
+        units, index = cls.__unit_size_map__(in_unit_type, "if unit is the biggest")  # type: ignore
+        return index == units.__len__() - 1
+
+    @classmethod
+    def is_smallest(cls, in_unit_type=True):
+        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return False
+        units, index = cls.__unit_size_map__(in_unit_type, "if unit is the smallest")  # type: ignore
+        return index == 0
+
+    @classmethod
+    def __unit_size_map__(cls, keep_unit_type, operation_name):
+        if cls is Unit or cls.__base__ is Unit:
+            raise Exception(f"Cannot get {operation_name} from {'Unit base class' if cls is Unit else f'{cls.__name__} quantity class'}")
+        units = sorted(cls.units_by_category(cls.unit_type) if keep_unit_type else cls.__base__.__subclasses__(), # type: ignore
+                       key=lambda o: o.multiplier)
+        index = units.index(cls)
+        return units, index
 
     @staticmethod
     def __clr_pd__(num):
         from re import sub
-        return float(sub(r"(?<=\.)(0)(\1+)", "", str(num)))
+        return float(sub(r"(\.\d+?)(0)(\2+)$", "\1", str(num)))
 
     def __conv__(self, unit):
-        return self.__value * self.multiplier / unit(0).multiplier
+        return self.__value * self.__multiplier / unit(0).multiplier
 
     def __calc__(self, other, oper_name, oper_symbol):
         op = {'+': lambda x, y: x + y, '-': lambda x, y: x - y}
@@ -51,10 +89,10 @@ class Unit:
         return other.__class__(op[oper_symbol](self.__conv__(other.__class__), other.__value))
 
     def __add__(self, other):
-        return self.__calc__(other, "Addition", "+")
+        return self.__calc__(other, "Addition", "+")  # type: ignore
 
     def __sub__(self, other):
-        return self.__calc__(other, "Subtraction", "-")
+        return self.__calc__(other, "Subtraction", "-")  # type: ignore
 
     def __getitem__(self, unit):
         return self.convert_to(unit)
@@ -96,17 +134,23 @@ class Unit:
         return round(self.__value)
 
     def __float__(self):
-        return self.__clr_pd__(float(self.__value))
+        return self.__clr_pd__(float(self.__value))  # type: ignore
 
     @classmethod
     def default_unit(cls):
         clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
-        return [c for c in clss if c.multiplier == 1][0]
+        return [c for c in clss if c.multiplier == 1][0]  # type: ignore
 
     @classmethod
     def units_by_category(cls, unit):
         clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
         return [c for c in clss if c.unit_type is unit]
+
+
+class UnitType(Enum):
+    METRIC = 0
+    IMPERIAL = 1
+    ASTRONOMICAL = 2
 
 
 class Unitor:
@@ -117,23 +161,32 @@ class Unitor:
         self.__ut = unit_type
 
     def __call__(self, cls: type):
-        cls.multiplier = self.__mp
-        cls.symbol = self.__sy
-        cls.unit_type = self.__ut
+        if type(cls) is not type:
+            raise Exception("Unitor cannot be applied on function")
+        if cls.__base__.__base__ is not Unit:
+            raise Exception("Unitor class is not extending Quantity class")
+        cls._Unit__multiplier = self.__mp
+        cls._Unit__symbol = self.__sy
+        cls._Unit__unit_type = self.__ut
         return cls
+
+
+class QuantityType(Enum):
+    MULTIPLIER = 0
+    CUSTOM_CALCULATION = 1
 
 
 class Quantitor:
 
-    def __init__(self, sign=None):
+    def __init__(self, sign=None, quantity_type=QuantityType.MULTIPLIER):
         self.__s = sign
+        self.__qt = quantity_type
 
     def __call__(self, cls):
-        cls.sign = self.__s
+        if type(cls) is not type:
+            raise Exception("Quantitior cannot be applied on function")
+        if cls.__base__ is not Unit:
+            raise Exception("Quantitor class is not extending Unit class")
+        cls._Unit__sign = self.__s
+        cls._Unit__quantity_type = self.__qt
         return cls
-
-
-class UnitType(Enum):
-    METRIC = "Metric"
-    IMPERIAL = "Imperial"
-    ASTRONOMICAL = "Astronomical"

@@ -8,17 +8,14 @@ if __name__ == '__main__':
         quantity = f[:-3]
 
         BASE = f"""
-from typing import TypeVar
-from Uniter.Uniter import Unit
-
-__Q = TypeVar("__Q")
+from Uniter.Uniter import Unit, __Q
 
 class {quantity}(Unit[__Q]): pass
 
 """.lstrip()
 
-        def pr(cls):
-            return inspect.isclass(cls) and cls.__name__ not in [quantity, "Quantitor", "Unit", "Unitor"]
+        def pr(clazz):
+            return inspect.isclass(clazz) and clazz.__name__ not in [quantity, "Quantitor", "Unit", "Unitor", "UnitType"]
 
 
         for name, cls in inspect.getmembers(importlib.import_module(f"Uniter.Units.{quantity}"),pr):

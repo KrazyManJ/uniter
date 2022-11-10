@@ -2,6 +2,7 @@ from .Units import *
 
 def parse(expression: str):
     import re
+    from .Uniter import Unit
     MAP = {}
     for q in Unit.__subclasses__():
         for u in q.__subclasses__():
