@@ -1,13 +1,11 @@
-# SI Table
-from .Length import *
-from .Mass import *
-from .Time import *
-from .Electric_current import *
-from .Temperature import *
-from .Amount_of_substance import *
-from .Luminous_intensity import *
-
-from .Speed import *
-from .Angle import *
-from .Resistance import *
-from .Voltage import *
+from .Length import KM, M, DM, CM, MM, McM, NM, PM, Mile, Yard, Foot, Inch, AstronomicalUnit, LightYear
+from .Mass import T, KG, G, MG, Pound, Ounce, Stone
+from .Time import SEC, MIN, HR, DAY, YR
+from .Electric_Current import A, MA
+from .Temperature import DEG_C, DEG_F, DEG_K
+from .Amount_of_substance import MOL
+from .Luminous_Intensity import MOL
+from .Speed import KMH, MS, MPH, FPS, LightSpeed
+from .Angle import DEG, RAD
+from .Resistance import OHM, KOHM, MOHM
+from .Voltage import Volt

@@ -1,7 +1,7 @@
 from Uniter.Uniter import Unit, Unitor, Quantitor
 
 @Quantitor("I")
-class LuminousIntensity(Unit): pass
+class Luminous_Intensity(Unit): pass
 
 @Unitor("cd",1)
-class MOL(LuminousIntensity): pass
+class MOL(Luminous_Intensity): pass

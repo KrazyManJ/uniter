@@ -15,7 +15,7 @@ class ClassPropertyDescriptor(object):
 
     def __set__(self, obj, value):
         if not self.fset:
-            raise AttributeError("can't set attribute")
+            raise AttributeError("Can't set attribute")
         type_ = type(obj)
         return self.fset.__get__(obj, type_)(value)
 
