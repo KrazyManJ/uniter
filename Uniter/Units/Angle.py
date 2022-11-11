@@ -1,17 +1,26 @@
-from Uniter.Uniter import Unit, Unitor, Quantitor, QuantityType
+from Uniter.Uniter import Unit, Unitor, Quantitor
 
-@Quantitor("°",QuantityType.CUSTOM_CALCULATION)
+@Quantitor("°")
 class Angle(Unit):
     def __conv__(self, unit):
-        from sympy import symbols, Eq, solve
-        from math import pi
-        deg, rad = symbols("deg rad")
-        return solve(Eq(deg * pi / 180, rad).subs({DEG: deg, RAD: rad}[self.__class__], float(self)))[0]
+        from math import pi, degrees, radians
+        DEGS = [DEG, MOA, SOA]
+        if self.__class__ in DEGS and unit in DEGS:
+            return super().__conv__(unit) # type: ignore
+        elif self.__class__ in DEGS and unit is RAD:
+            return radians(float(self[DEG]))
+        elif self.__class__ is RAD and unit in DEGS:
+            return float(DEG(degrees(float(self)))[unit])
 
 
 @Unitor("°", 1)
 class DEG(Angle): pass
 
+@Unitor("′", 1/60)
+class MOA(Angle): pass
 
-@Unitor("rad", 0)
+@Unitor("″", 1/3600)
+class SOA(Angle): pass
+
+@Unitor("rad")
 class RAD(Angle): pass

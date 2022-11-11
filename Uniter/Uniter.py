@@ -4,6 +4,7 @@ from .Exceptions import UnitInstatiateError, UnitConversionError, UnitInheritanc
     UnitUnitorError, UnitArithmeticError, UnitBaseClassError
 from .Util import classproperty
 
+
 class Unit:
 
     def __init__(self, value):
@@ -12,30 +13,30 @@ class Unit:
         if type(self).__base__ is Unit:
             raise UnitInstatiateError(f"Cannot instatiate {type(self).__name__} quantity class")
         if type(self).__base__.__base__ is not Unit:
-            raise UnitInstatiateError(f"Cannot instatiate {type(self).__name__} class that is not child of quantity class")
+            raise UnitInstatiateError(
+                f"Cannot instatiate {type(self).__name__} class that is not child of quantity class")
         if self.__class__.__dict__.__len__() == 2:
             self.__class__.__multiplier = 0
             self.__class__.__symbol = ""
             self.__class__.__unit_type = None
             self.__class__.__sign = ""
-            self.__class__.__quantity_type = QuantityType.MULTIPLIER
         self.__value = value
 
+    @classproperty
+    def multiplier(self) -> float:
+        return self.__multiplier
 
     @classproperty
-    def multiplier(self) -> float: return self.__multiplier
+    def symbol(self):
+        return self.__symbol
 
     @classproperty
-    def symbol(self): return self.__symbol
+    def unit_type(self):
+        return self.__unit_type
 
     @classproperty
-    def unit_type(self): return self.__unit_type
-
-    @classproperty
-    def sign(self): return self.__sign
-
-    @classproperty
-    def quantity_type(self): return self.__quantity_type
+    def sign(self):
+        return self.__sign
 
     def convert_to(self, unit):
         if type(self) is unit:
@@ -56,36 +57,41 @@ class Unit:
 
     @classmethod
     def bigger_unit(cls, keep_unit_type=True):
-        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return cls
+        if cls.multiplier == 0: return cls
         units, index = cls.__unit_size_map__(keep_unit_type, "bigger unit")  # type: ignore
         return units[min(index + 1, units.__len__() - 1)]
 
     @classmethod
     def smaller_unit(cls, keep_unit_type=True):
-        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return cls
+        if cls.multiplier == 0: return cls
         units, index = cls.__unit_size_map__(keep_unit_type, "smaller unit")  # type: ignore
         return units[max(index - 1, 0)]
 
     @classmethod
     def is_biggest(cls, in_unit_type=True):
-        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return False
+        if cls.multiplier == 0: return False
         units, index = cls.__unit_size_map__(in_unit_type, "if unit is the biggest")  # type: ignore
         return index == units.__len__() - 1
 
     @classmethod
     def is_smallest(cls, in_unit_type=True):
-        if cls.quantity_type is QuantityType.CUSTOM_CALCULATION: return False
+        if cls.multiplier == 0: return False
         units, index = cls.__unit_size_map__(in_unit_type, "if unit is the smallest")  # type: ignore
         return index == 0
 
     @classmethod
     def __unit_size_map__(cls, keep_unit_type, operation_name):
         if cls is Unit or cls.__base__ is Unit:
-            raise UnitBaseClassError(f"Cannot get {operation_name} from {'Unit base class' if cls is Unit else f'{cls.__name__} quantity class'}")
+            raise UnitBaseClassError(
+                f"Cannot get {operation_name} from {'Unit base class' if cls is Unit else f'{cls.__name__} quantity class'}")
         if cls.__base__.__base__ is not Unit:
-            raise UnitInheritanceError(f"Cannot get {operation_name} from {cls.__name__} class because it is not in correct inheritance order (Unit -> QuantityName -> {cls.__name__})")
-        units = sorted(cls.units_by_category(cls.unit_type) if keep_unit_type else cls.__base__.__subclasses__(), # type: ignore
-                       key=lambda o: o.multiplier)
+            raise UnitInheritanceError(
+                f"Cannot get {operation_name} from {cls.__name__} class because it is not in correct inheritance order (Unit -> QuantityName -> {cls.__name__})")
+        if keep_unit_type:
+            uts = [c for c in cls.units_by_category(cls.unit_type) if c.multiplier != 0]  # type: ignore
+        else:
+            uts = [c for c in cls.__base__.__subclasses__() if c.multiplier != 0]  # type: ignore
+        units = sorted(uts, key=lambda o: o.multiplier)
         index = units.index(cls)
         return units, index
 
@@ -187,16 +193,10 @@ class Unitor:
         return cls
 
 
-class QuantityType(Enum):
-    MULTIPLIER = 0
-    CUSTOM_CALCULATION = 1
-
-
 class Quantitor:
 
-    def __init__(self, sign=None, quantity_type=QuantityType.MULTIPLIER):
+    def __init__(self, sign=None):
         self.__s = sign
-        self.__qt = quantity_type
 
     def __call__(self, cls):
         if type(cls) is not type:
@@ -204,5 +204,4 @@ class Quantitor:
         if cls.__base__ is not Unit:
             raise UnitQuantitorError("Quantitor class is not extending Unit class")
         cls._Unit__sign = self.__s
-        cls._Unit__quantity_type = self.__qt
         return cls

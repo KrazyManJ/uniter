@@ -9,10 +9,9 @@ if __name__ == '__main__':
         quantity = f[:-3]
         BASE = f"from Uniter.Uniter import Unit, __Q\n\nclass {quantity}(Unit[__Q]): pass\n\n".lstrip()
         def pr(clazz):
-            return inspect.isclass(clazz) and clazz.__name__ not in [quantity, "Quantitor", "Unit", "Unitor", "UnitType", "QuantityType"]
+            return inspect.isclass(clazz) and clazz.__name__ not in [quantity, "Quantitor", "Unit", "Unitor", "UnitType"]
         for name, cls in inspect.getmembers(importlib.import_module(f"Uniter.Units.{quantity}"),pr):
             BASE += f"class {name}({quantity}[{quantity}]): pass\n"
-        print(BASE)
         open(UNIT_PATH+rf"\{quantity}.pyi","w").write(BASE)
     __INIT__ = ""
     for q in Unit.__subclasses__():

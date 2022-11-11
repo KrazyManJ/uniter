@@ -6,6 +6,6 @@ from .Temperature import DEG_C, DEG_F, DEG_K
 from .Amount_of_substance import MOL
 from .Luminous_Intensity import MOL
 from .Speed import KMH, MS, MPH, FPS, LightSpeed
-from .Angle import DEG, RAD
+from .Angle import DEG, MOA, SOA, RAD
 from .Resistance import OHM, KOHM, MOHM
 from .Voltage import Volt
