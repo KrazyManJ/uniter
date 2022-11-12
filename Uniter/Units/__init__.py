@@ -9,3 +9,5 @@ from .Speed import KMH, MS, MPH, FPS, LightSpeed
 from .Angle import DEG, MOA, SOA, RAD
 from .Resistance import OHM, KOHM, MOHM
 from .Voltage import Volt
+from .Volume import M_3, HL, L, DM_3, DL, CL, ML, CM_3
+from .Area import KM_2, HA, ARE, M_2, DM_2, CM_2, MM_2

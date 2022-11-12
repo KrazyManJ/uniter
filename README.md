@@ -51,6 +51,7 @@ print( KM(50)-KG(30) )              # raise TypeError: Subtraction of non-equal 
 ```py
 from Uniter.Units import *
 
+print ( KM(30) * 2 )                # prints out 900km in Unit object
 print ( KM(30) * 80 )               # prints out 2400km in Unit object
 print ( KM(30) / 6 )                # prints out 5km in Unit object
 print ( KM(8) // 6 )                # prints out 1km in Unit object
@@ -111,7 +112,7 @@ class ExampleQuantity(Unit): pass
 #
 # - Multiplier is difference between this unit and default one
 #
-# - IF MULTUPLIER IS 1 THEN THIS UNIT IS DEFAULT
+# - IF MULTUPLIER IS 1 THEN THIS UNIT IS CONSIDERED AS DEFAULT
 #
 # - I've also defined unit type, this is not required, 
 #   it is used to filter out specific type of units

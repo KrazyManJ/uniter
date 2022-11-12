@@ -134,13 +134,13 @@ class Unit:
         self.__value = pow(self.__value, power, modulo)
         return self
 
-    def __truediv__(self, other: int | float):
+    def __truediv__(self, other):
         if not isinstance(other, (int, float)):
             raise UnitArithmeticError(f"Division of Unit with {other.__class__.__name__}, use int/float instead!")
         self.__value /= other
         return self
 
-    def __floordiv__(self, other: int | float):
+    def __floordiv__(self, other):
         if not isinstance(other, (int, float)):
             raise UnitArithmeticError(f"Division of Unit with {other.__class__.__name__}, use int/float instead!")
         self.__value //= other
@@ -157,6 +157,29 @@ class Unit:
 
     def __float__(self):
         return self.__clr_pd__(float(self.__value))  # type: ignore
+
+    def __logic__(self, other, logiclambda):
+        if not isinstance(other, self.__class__.__base__): return False
+        return logiclambda(self[other.__class__].__value, other.__value)  # type: ignore
+
+    def __eq__(self, other):
+        return self.__logic__(other, lambda a, b: a == b)  # type: ignore
+
+    def __ne__(self, other):
+        return self.__logic__(other, lambda a, b: a != b)  # type: ignore
+
+    def __lt__(self, other):
+        return self.__logic__(other, lambda a, b: a < b)  # type: ignore
+    
+    def __le__(self, other):
+        return self.__logic__(other, lambda a, b: a <= b)  # type: ignore
+
+    def __gt__(self, other):
+        return self.__logic__(other, lambda a, b: a > b)  # type: ignore
+
+    def __ge__(self, other):
+        return self.__logic__(other, lambda a, b: a >= b)  # type: ignore
+
 
     @classmethod
     def default_unit(cls):
