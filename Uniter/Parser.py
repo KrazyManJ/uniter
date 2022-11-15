@@ -1,10 +1,10 @@
 from .Exceptions import UnknownUnitError
 from .Units import *
 
-def parse(expression: str):
+def parse(expression, unit_mapping = None):
     import re
     from .Uniter import Unit
-    MAP = {}
+    MAP = {} if unit_mapping is None else {k:v.__name__ for k, v in unit_mapping.items()}
     for q in Unit.__subclasses__():
         for u in q.__subclasses__():
             MAP[u.symbol] = u.__name__

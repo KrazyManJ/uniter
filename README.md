@@ -14,6 +14,7 @@ from human-readable string.
   - [X] [Addition / Subtraction](https://github.com/KrazyManJ/Uniter#addition--subtraction)
   - [X] [Multiplication / Division / Floor division](https://github.com/KrazyManJ/Uniter#addition--subtraction)
   - [X] [Power](https://github.com/KrazyManJ/Uniter#addition--subtraction)
+- [X] Logical (comparison) operations between units
 - [X] [Parsing](https://github.com/KrazyManJ/Uniter#parsing-string-to-uniter-units) from humar-readable string
 - [X] Ability to [add custom units](https://github.com/KrazyManJ/Uniter#custom-quantityunits)
 - [ ] Adding formulas to create relation between units of different physics quantity (e.g. ohm's law)

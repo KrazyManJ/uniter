@@ -1,10 +1,10 @@
 import unittest
 
-from Uniter import Parser
+from Uniter import Parser, Formulas
 from Uniter.Units import *
 from Uniter.Exceptions import *
 from Uniter.Uniter import Unit
-
+from Uniter.Units.Length import Length
 
 class UniterTestCase(unittest.TestCase):
 
@@ -15,6 +15,7 @@ class UniterTestCase(unittest.TestCase):
 
     def test_parser(self):
         self.assertEqual(Parser.parse("5km + 200m"), KM(5.2))
+        self.assertEqual(Parser.parse("5kmph",{"kmph":KMH}), KMH(5))
         self.assertRaises(UnknownUnitError, Parser.parse, "5unit + 8m - 4dm")
 
     def test_logical_operators(self):
@@ -56,8 +57,18 @@ class UniterTestCase(unittest.TestCase):
 
     def test_instantiation_error(self):
         self.assertRaises(UnitInstatiateError, Unit, 5)
-        # instantiation of Length (Parent class of Meter => M)
         self.assertRaises(UnitInstatiateError, M.__base__, 5)
+
+    def test_formulas(self):
+
+        self.assertRaises(UnitFormulaParameterError,Formulas.ohms_law,resistance=5, voltage=Volt(30))
+        self.assertRaises(UnitFormulaParameterError,Formulas.ohms_law,resistance=KM(8), voltage=Volt(30))
+        self.assertRaises(UnitFormulaParameterError,Formulas.ohms_law,resistance=OHM(50),voltage=Volt(30),electric_current=A(0.6))
+        self.assertRaises(UnitFormulaParameterError,Formulas.ohms_law,resistance=OHM(50))
+        self.assertRaises(UnitFormulaParameterError,Formulas.ohms_law,{})
+
+        self.assertEqual(Formulas.ohms_law(resistance=OHM(50),voltage=Volt(30)),A(0.6))
+        self.assertEqual(Formulas.average_speed(distance=M(45),time=SEC(30)),MS(1.5))
 
 
 if __name__ == '__main__':

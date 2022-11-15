@@ -28,5 +28,7 @@ class UnitUnitorError(Exception): pass
 @default_exception_module()
 class UnknownUnitError(Exception): pass
 
+@default_exception_module()
+class UnitFormulaParameterError(Exception): pass
 
 

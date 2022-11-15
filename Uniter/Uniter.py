@@ -55,6 +55,16 @@ class Unit:
     def in_smaller_unit(self, keep_unit_type=True):
         return self[self.__class__.smaller_unit(keep_unit_type)]
 
+    def in_default_unit(self):
+        return self[self.default_unit()]
+
+    def is_convertable_to(self, unit):
+        try:
+            self[unit]
+        except UnitConversionError:
+            return False
+        return True
+
     @classmethod
     def bigger_unit(cls, keep_unit_type=True):
         if cls.multiplier == 0: return cls
@@ -78,6 +88,16 @@ class Unit:
         if cls.multiplier == 0: return False
         units, index = cls.__unit_size_map__(in_unit_type, "if unit is the smallest")  # type: ignore
         return index == 0
+
+    @classmethod
+    def default_unit(cls):
+        clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
+        return [c for c in clss if c.multiplier == 1][0]  # type: ignore
+
+    @classmethod
+    def units_by_category(cls, unit):
+        clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
+        return [c for c in clss if c.unit_type is unit]
 
     @classmethod
     def __unit_size_map__(cls, keep_unit_type, operation_name):
@@ -179,17 +199,6 @@ class Unit:
 
     def __ge__(self, other):
         return self.__logic__(other, lambda a, b: a >= b)  # type: ignore
-
-
-    @classmethod
-    def default_unit(cls):
-        clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
-        return [c for c in clss if c.multiplier == 1][0]  # type: ignore
-
-    @classmethod
-    def units_by_category(cls, unit):
-        clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
-        return [c for c in clss if c.unit_type is unit]
 
 
 class UnitType(Enum):
