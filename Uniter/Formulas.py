@@ -25,21 +25,33 @@ def __form__(eq, unit_map, **values):
     return unit_map[str(runit)](res)
 
 
-def ohms_law(electric_current=None, voltage=None, resistance=None):
+def ohms_law(electric_current: Electric_Current = None, voltage: Voltage = None, resistance: Resistance = None):
     return __form__(Eq(Symbol("i"), Symbol("u") / Symbol("r")), {"r": OHM, "u": Volt, "i": A}, i=electric_current,
                     u=voltage, r=resistance)
 
 
-def average_speed(distance=None, speed=None, time=None):
+def average_speed(distance: Length = None, speed: Speed = None, time: Time = None):
     return __form__(Eq(Symbol("s"), Symbol("v") * Symbol("t")), {"s": M, "v": MS, "t": SEC}, s=distance, v=speed,
                     t=time)
 
 
-def cylinder_volume(radius=None, height=None, volume=None):
+def cylinder_volume(radius: Length = None, height: Length = None, volume: Volume = None):
     from math import pi
     return __form__(Eq(pi * Symbol("r") ** 2 * Symbol("v"), Symbol("V")), {"r": M, "v": M, "V": M_3}, r=radius,
                     v=height, V=volume)
 
-def cylinder_surface(radius=None, height=None, surface=None):
+
+def cylinder_surface(radius: Length = None, height: Length = None, surface: Area = None):
     from math import pi
-    return __form__(Eq(2*pi*Symbol("r")*(Symbol("r")+Symbol("v")), Symbol("S")), {"r": M, "v": M, "S": M_2}, r=radius, v=height, S=surface)
+    return __form__(Eq(2 * pi * Symbol("r") * (Symbol("r") + Symbol("v")), Symbol("S")), {"r": M, "v": M, "S": M_2},
+                    r=radius, v=height, S=surface)
+
+
+def sphere_volume(radius: Length = None, volume: Volume = None):
+    from math import pi
+    return __form__(Eq(4 / 3 * pi * Symbol("r") ** 3, Symbol("V")), {"r": M, "V": M_3}, r=radius, V=volume)
+
+
+def sphere_surface(radius: Length = None, surface: Area = None):
+    from math import pi
+    return __form__(Eq(4 * pi * Symbol("r") ** 2), {"r": M, "S": M_2}, r=radius, S=surface)
