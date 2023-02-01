@@ -18,6 +18,9 @@ classifiers = [
     "Operating System :: OS Independent",
     "Typing :: Typed"
 ]
+dependencies = [
+    "sympy>=1.11.1"
+]
 
 [project.urls]
 "Repository" = "https://github.com/KrazyManJ/uniter"
