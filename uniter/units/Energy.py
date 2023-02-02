@@ -1,16 +1,16 @@
 from uniter.Uniter import Unit, Quantitor, Unitor
 
 @Quantitor("W")
-class Work(Unit): pass
+class Energy(Unit): pass
 
 @Unitor("J", 1)
-class J(Work): pass
+class J(Energy): pass
 
 @Unitor("kJ", 10 ** 3)
-class KJ(Work): pass
+class KJ(Energy): pass
 
 @Unitor("MJ", 10 ** 6)
-class MJ(Work): pass
+class MJ(Energy): pass
 
 @Unitor("GJ", 10 ** 9)
-class GJ(Work): pass
+class GJ(Energy): pass

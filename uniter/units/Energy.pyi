@@ -10,5 +10,3 @@ class KJ(Energy[Energy]): pass
 
 class MJ(Energy[Energy]): pass
 
-class Work(Energy[Energy]): pass
-
