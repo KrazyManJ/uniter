@@ -10,9 +10,9 @@ class Temperature(Unit):
         EQ = {(DEG_C, DEG_K): Eq(C + 273.15, K), (DEG_C, DEG_F): Eq(9 / 5 * C + 32, F),
               (DEG_K, DEG_F): Eq(9 / 5 * K - 459.67, F)}
 
-        return \
-        solve(EQ[[k for k in EQ.keys() if set(k) == {self.__class__, unit}][0]].subs(SYM[self.__class__], float(self)))[  # type: ignore
-            0]
+        return solve(
+            EQ[[k for k in EQ.keys() if set(k) == {self.__class__, unit}][0]].subs(SYM[self.__class__], float(self)) # type: ignore
+        )[0]
 
 
 @Unitor("°C", 1)

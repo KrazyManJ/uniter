@@ -12,3 +12,4 @@ from .Voltage import Voltage, Volt
 from .Volume import Volume, M_3, HL, L, DM_3, DL, CL, ML, CM_3
 from .Area import Area, KM_2, HA, ARE, M_2, DM_2, CM_2, MM_2
 from .Density import Density, KGM_3, GCM_3
+from .Work import Work, J, KJ, MJ, GJ
