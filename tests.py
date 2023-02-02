@@ -1,10 +1,10 @@
 import unittest
 
-from Uniter import Parser, Formulas
-from Uniter.Units import *
-from Uniter.Exceptions import *
-from Uniter.Uniter import Unit
-from Uniter.Units.Length import Length
+from uniter import Parser, Formulas
+from uniter.units import *
+from uniter.Exceptions import *
+from uniter.Uniter import Unit
+from uniter.units.Length import Length
 
 class UniterTestCase(unittest.TestCase):
 

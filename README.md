@@ -25,12 +25,13 @@ Here are some examples of features, including bad one to show you what you shoul
 not do while using all of these aspects.
 
 ### Conversion
-```py
-from Uniter.Units import *
 
-print( DM(80).convert_to(M) )       # prints out 8m in Unit object
-print( DM(80)[M] )                  # same thing but shorter syntax
-print( DM(80)[KG] )                 # raises TypeError: Illegal conversion from Length to object 
+```py
+from uniter.units import *
+
+print(DM(80).convert_to(M))  # prints out 8m in Unit object
+print(DM(80)[M])  # same thing but shorter syntax
+print(DM(80)[KG])  # raises TypeError: Illegal conversion from Length to object 
 ```
 
 ### Addition / Subtraction
@@ -38,11 +39,11 @@ print( DM(80)[KG] )                 # raises TypeError: Illegal conversion from 
 - Converts to last used unit in calculation
 
 ```py
-from Uniter.Units import *
+from uniter.units import *
 
-print( KM(50)+M(30) )               # prints out 5030m in Unit object
-print( KM(50)-M(30) )               # prints out 4070m in Unit object
-print( KM(50)-KG(30) )              # raise TypeError: Subtraction of non-equal units (Length - Mass)
+print(KM(50) + M(30))  # prints out 5030m in Unit object
+print(KM(50) - M(30))  # prints out 4070m in Unit object
+print(KM(50) - KG(30))  # raise TypeError: Subtraction of non-equal units (Length - Mass)
 ```
 
 ### Multiplication / Division / Floor division
@@ -50,28 +51,30 @@ print( KM(50)-KG(30) )              # raise TypeError: Subtraction of non-equal 
 - One of mul/div values needs to be int/float, not Unit type
 
 ```py
-from Uniter.Units import *
+from uniter.units import *
 
-print ( KM(30) * 2 )                # prints out 900km in Unit object
-print ( KM(30) * 80 )               # prints out 2400km in Unit object
-print ( KM(30) / 6 )                # prints out 5km in Unit object
-print ( KM(8) // 6 )                # prints out 1km in Unit object
-print ( KM(8) * KG(6) )             # TypeError: Multiplication of Unit with KG, use int/float instead!
+print(KM(30) * 2)  # prints out 900km in Unit object
+print(KM(30) * 80)  # prints out 2400km in Unit object
+print(KM(30) / 6)  # prints out 5km in Unit object
+print(KM(8) // 6)  # prints out 1km in Unit object
+print(KM(8) * KG(6))  # TypeError: Multiplication of Unit with KG, use int/float instead!
 ```
 
 ### Power
-```py
-from Uniter.Units import *
 
-print ( KM(2) ** 16 )               # prints out 65536km in Unit object
-print ( KM(2) ** KM(3) )            # Power of Unit with KM, use int/float instead!
+```py
+from uniter.units import *
+
+print(KM(2) ** 16)  # prints out 65536km in Unit object
+print(KM(2) ** KM(3))  # Power of Unit with KM, use int/float instead!
 ```
 
 ### Parsing string to Uniter units
-```py
-import Uniter
 
-print( Uniter.parse("2m + 5km") )   # returns 5.002km in Unit object
+```py
+import uniter
+
+print(uniter.parse("2m + 5km"))  # returns 5.002km in Unit object
 ```
 
 ### Custom quantity/units
@@ -101,13 +104,15 @@ Now for creation, for making basic units using prefixes like k (kilo), m (mili),
 you can just use defined decorators in `Uniter.py` file like that:
 
 ```py
-from Uniter.Uniter import Unit,Unitor,Quantitor,UnitType
+from uniter.Uniter import Unit, Unitor, Quantitor, UnitType
+
 
 # In this example I am using keywords arguments to make it clearer for you
 
 # Creates physics quantity of your name and sign
 @Quantitor(sign="EQ")
 class ExampleQuantity(Unit): pass
+
 
 # Creating unit of out ExampleQuantity quantity:
 #
@@ -117,8 +122,34 @@ class ExampleQuantity(Unit): pass
 #
 # - I've also defined unit type, this is not required, 
 #   it is used to filter out specific type of units
-@Unitor(symbol="fU",mp=1,unit_type=UnitType.METRIC)
+@Unitor(symbol="fU", mp=1, unit_type=UnitType.METRIC)
 class FirstU(ExampleQuantity): pass
 ```
 
-If you have any ideas of other units, and you want to include them in this package, contact me 😉 !
+#### Add custom calculation method
+
+If you are trying to make quantity with different type of calculation,
+than a regular units multiplication or division,
+you can define it via `__conv__(self, unit)` method which returns `float`.
+
+Here i will show you piece of my code from [Angle.py](uniter/units/Angle.py):
+
+```python
+from uniter.Uniter import Unit, Quantitor
+
+
+@Quantitor("°")
+class Angle(Unit):
+  def __conv__(self, unit):
+    from math import pi, degrees, radians
+    DEGS = [DEG, MOA, SOA]
+    if self.__class__ in DEGS and unit in DEGS:
+      return super().__conv__(unit)  # type: ignore
+    elif self.__class__ in DEGS and unit is RAD:
+      return radians(float(self[DEG]))
+    elif self.__class__ is RAD and unit in DEGS:
+      return float(DEG(degrees(float(self)))[unit])
+
+
+...  # other units
+```
