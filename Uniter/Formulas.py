@@ -8,9 +8,9 @@ from sympy.core.symbol import Symbol
 def __form__(eq, unit_map, **values):
     decl_Size = {k: v for k, v in values.items() if v is not None}.__len__()
     if decl_Size < values.__len__() - 1:
-        raise UnitFormulaParameterError("NOT ENOUGH!")
+        raise UnitFormulaParameterError("You did not provide enough parameters to calculation!")
     if decl_Size == values.__len__():
-        raise UnitFormulaParameterError("ALL DECLARED!")
+        raise UnitFormulaParameterError("You provide all arguments, and there is nothing to calculate!")
     for s in eq.free_symbols:
         val, un = values[str(s)], unit_map[str(s)]
         if val is not None:
