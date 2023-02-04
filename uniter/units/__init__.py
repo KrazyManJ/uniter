@@ -14,3 +14,4 @@ from .Area import Area, KM_2, HA, ARE, M_2, DM_2, CM_2, MM_2
 from .Density import Density, KGM_3, GCM_3
 from .Energy import Energy, J, KJ, MJ, GJ
 from .Pressure import Pressure, PA
+from .Power import Power, W
