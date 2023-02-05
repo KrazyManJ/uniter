@@ -4,7 +4,6 @@ from uniter import Parser, Formulas
 from uniter.units import *
 from uniter.Exceptions import *
 from uniter.Uniter import Unit
-from uniter.units.Length import Length
 
 class UniterTestCase(unittest.TestCase):
 

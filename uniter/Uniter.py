@@ -237,3 +237,11 @@ class Quantitor:
             raise UnitQuantitorError("Quantitor class is not extending Unit class")
         cls._Unit__sign = self.__s
         return cls
+
+def get_all_quantities():
+    return Unit.__subclasses__()
+
+def get_all_units():
+    r = []
+    for q in get_all_quantities(): r.extend(q.__subclasses__())
+    return r
