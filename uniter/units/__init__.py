@@ -15,3 +15,4 @@ from .Density import Density, KGM_3, GCM_3
 from .Energy import Energy, J, KJ, MJ, GJ
 from .Pressure import Pressure, PA
 from .Power import Power, W
+from .Computer_Memory import Computer_Memory, Bit, Byte, Kb, KB, Mb, MB, Gb, GB, Tb, TB, Pb, PB, Eb, EB, Zb, ZB, Yb, YB
