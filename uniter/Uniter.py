@@ -67,35 +67,47 @@ class Unit:
 
     @classmethod
     def bigger_unit(cls, keep_unit_type=True):
+        if cls is Unit:
+            raise UnitBaseClassError("Cannot get bigger unit of Unit base class!")
         if cls.multiplier == 0: return cls
         units, index = cls.__unit_size_map__(keep_unit_type, "bigger unit")  # type: ignore
         return units[min(index + 1, units.__len__() - 1)]
 
     @classmethod
     def smaller_unit(cls, keep_unit_type=True):
+        if cls is Unit:
+            raise UnitBaseClassError("Cannot get the smaller of Unit base class!")
         if cls.multiplier == 0: return cls
         units, index = cls.__unit_size_map__(keep_unit_type, "smaller unit")  # type: ignore
         return units[max(index - 1, 0)]
 
     @classmethod
     def is_biggest(cls, in_unit_type=True):
+        if cls is Unit:
+            raise UnitBaseClassError("Cannot get the biggest unit of Unit base class!")
         if cls.multiplier == 0: return False
         units, index = cls.__unit_size_map__(in_unit_type, "if unit is the biggest")  # type: ignore
         return index == units.__len__() - 1
 
     @classmethod
     def is_smallest(cls, in_unit_type=True):
+        if cls is Unit:
+            raise UnitBaseClassError("Cannot get the smallest unit of Unit base class!")
         if cls.multiplier == 0: return False
         units, index = cls.__unit_size_map__(in_unit_type, "if unit is the smallest")  # type: ignore
         return index == 0
 
     @classmethod
     def default_unit(cls):
+        if cls is Unit:
+            raise UnitBaseClassError("Cannot get default method of Unit base class!")
         clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
         return [c for c in clss if c.multiplier == 1][0]  # type: ignore
 
     @classmethod
     def units_by_category(cls, unit):
+        if cls is Unit:
+            raise UnitBaseClassError("Cannot get units from Unit base class!")
         clss = (cls if cls.__base__ is Unit else cls.__base__).__subclasses__()
         return [c for c in clss if c.unit_type is unit]
 
@@ -190,7 +202,7 @@ class Unit:
 
     def __lt__(self, other):
         return self.__logic__(other, lambda a, b: a < b)  # type: ignore
-    
+
     def __le__(self, other):
         return self.__logic__(other, lambda a, b: a <= b)  # type: ignore
 
@@ -238,8 +250,10 @@ class Quantitor:
         cls._Unit__sign = self.__s
         return cls
 
+
 def get_all_quantities():
     return Unit.__subclasses__()
+
 
 def get_all_units():
     r = []

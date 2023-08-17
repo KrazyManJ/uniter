@@ -1,3 +1,6 @@
+.idea
+
 dist
 
 scripts/token.txt
+main.py
