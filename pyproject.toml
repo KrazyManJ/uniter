@@ -11,7 +11,8 @@ version = "1.0.0"
 authors = [{ name = "KrazyManJ" }]
 description = "Package to handle unit conversion."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -19,7 +20,7 @@ classifiers = [
     "Typing :: Typed"
 ]
 dependencies = [
-    "sympy>=1.11.1"
+    "sympy>=1.12"
 ]
 
 [project.urls]
